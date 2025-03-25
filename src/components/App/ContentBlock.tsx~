@@ -1,0 +1,21 @@
+import {Flex, FlexProps, useMantineTheme} from "@mantine/core";
+
+export type ContentBlockProps = FlexProps & {
+    title?: string
+}
+
+const ContentBlock: React.FC<ContentBlockProps> = ({style, ...props}) => {
+    const theme = useMantineTheme()
+    return (<>
+        <Flex p={15} {...props} style={{
+            border: '1px solid ' + theme.colors.green[6],
+            borderRadius: '10px',
+            boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.15)',
+            overflow: 'hidden', ...style
+        }}>
+
+        </Flex>
+    </>);
+}
+
+export default ContentBlock

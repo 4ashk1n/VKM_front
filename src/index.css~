@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Shantell';
+    font-weight: bold;
+    src: url('./assets/fonts/ShantellSans-Bold.ttf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Shantell';
+    src: url('./assets/fonts/ShantellSans-Medium.ttf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./assets/fonts/Inter-VariableFont_opsz,wght.ttf') format('opentype');
+}
+
+h1, h2, h3 {
+    font-family: 'Shantell', sans-serif;
+}\
