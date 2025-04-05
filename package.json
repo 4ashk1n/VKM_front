@@ -13,6 +13,7 @@
     "@mantine/core": "^7.17.2",
     "@mantine/hooks": "^7.17.2",
     "axios": "^1.8.4",
+    "mobx": "^6.13.7",
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",

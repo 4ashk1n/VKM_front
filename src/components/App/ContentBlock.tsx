@@ -1,4 +1,4 @@
-import {Flex, FlexProps, useMantineTheme} from "@mantine/core";
+import {Flex, FlexProps, Title, useMantineTheme} from "@mantine/core";
 
 export type ContentBlockProps = FlexProps & {
     title?: string
@@ -13,7 +13,14 @@ const ContentBlock: React.FC<ContentBlockProps> = ({style, ...props}) => {
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.15)',
             overflow: 'hidden', ...style
         }}>
-
+            {
+                props.title ? 
+                    <Title mb={20} w='100%' style={{textAlign: 'center'}} order={3} c='green'>{props.title}</Title>
+                    :null 
+            }
+            {
+                props.children
+            }
         </Flex>
     </>);
 }

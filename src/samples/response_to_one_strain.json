@@ -1,0 +1,160 @@
+{
+    "strain_id": 9,
+    "NameAndTaxonomy": {
+        "CollectionCode": "VKM",
+        "Subcollection": "F",
+        "Subcollection1": "FW",
+        "Genus": "Penicillium",
+        "Species": "janczewskii",
+        "Variant": "",
+        "Forma": "",
+        "FormaSpecies": "",
+        "Strain": 1552.0,
+        "AuthoritySp": "K.W. Zaleski 1927",
+        "AuthoritySubSp": "",
+        "Family": "",
+        "Order": "",
+        "Class": "",
+        "Synonym": "",
+        "TaxonomicID": "",
+        "Current_Name_DSMZ_MycoBank": "",
+        "Link_to_TaxonomicID": "",
+        "Pathogenicgroup": "4",
+        "Risk_group": "",
+        "SanPin": "",
+        "State": "",
+        "Type": {
+            "en": "",
+            "ru": ""
+        },
+        "Qouts": "",
+        "OtherName": "",
+        "ClassShort": "",
+        "References": "",
+        "References_nc": "",
+        "Race": "",
+        "Serovar": "",
+        "OtherCol": ""
+    },
+    "History": {
+        "ReceivedFrom": {
+            "en": "MSU_FS-00723",
+            "ru": "MSU_FS-00723"
+        },
+        "Depositor": {
+            "en": "",
+            "ru": ""
+        },
+        "ReceivedAs": "",
+        "ReceivedDate": "2024-09-10",
+        "AccessionDate": null,
+        "TypeOfSubstrate": {
+            "en": "soil",
+            "ru": ""
+        },
+        "IsolatedFrom": {
+            "en": "soil",
+            "ru": "почва"
+        },
+        "AnatomicPart": {
+            "en": "",
+            "ru": ""
+        },
+        "Location": {
+            "en": "",
+            "ru": ""
+        },
+        "Geographics": {
+            "en": "Rostov Region, Rostov Nature Reserve",
+            "ru": "Ростовская область, Ростовский заповедник"
+        },
+        "Country": {
+            "en": "Russia",
+            "ru": "Россия"
+        },
+        "USSR": "",
+        "CollectedBy": {
+            "en": "",
+            "ru": ""
+        },
+        "CollectedDate": null,
+        "IsolationDate": "2011-02-01",
+        "IsolatedBy": {
+            "en": "",
+            "ru": ""
+        },
+        "IsolateNumber": {
+            "en": "723",
+            "ru": "723"
+        },
+        "IdentificateBy": {
+            "en": "Aleksandrova A.V.",
+            "ru": "Александрова А.В."
+        },
+        "IdentificateDate": ""
+    },
+    "CultivationAndStorage": {
+        "IncubationTemp": "25",
+        "Tested_temperature_growth_range": "",
+        "GrowthMedium": "",
+        "GrowthCondition": {
+            "en": "",
+            "ru": ""
+        },
+        "StorageMethods": "",
+        "StorageFreeze": "",
+        "StorageOil": "",
+        "StorageSilicagel": "",
+        "StorageWater": "",
+        "StorageNitrogen": "",
+        "StorageSubcultivation": "",
+        "StorageSoil": ""
+    },
+    "StrainCharacteristics": {
+        "EnzymeProduction": {
+            "en": "",
+            "ru": ""
+        },
+        "MetaboliteProduction": {
+            "en": "",
+            "ru": ""
+        },
+        "Transformation": {
+            "en": "",
+            "ru": ""
+        },
+        "Degradation": {
+            "en": "",
+            "ru": ""
+        },
+        "Other": {
+            "en": "",
+            "ru": ""
+        },
+        "MatingType": "",
+        "DNA_Sequence_Accession_Numbers": ""
+    },
+    "GeneralInformation": {
+        "Latitude": "",
+        "Longitude": "",
+        "Altitude": "",
+        "Curator": "work",
+        "Category": "",
+        "Restrictions_on_use": "",
+        "Remarks": "nc",
+        "EntryDate": "2024-09-10",
+        "EditDate": "2024-10-31",
+        "Reidentif": {
+            "en": "",
+            "ru": ""
+        },
+        "Confidential_Information": "",
+        "Application": {
+            "en": "",
+            "ru": ""
+        },
+        "Form_of_supply": "",
+        "Report2020": "",
+        "Report2021": ""
+    }
+}

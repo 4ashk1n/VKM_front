@@ -1,17 +1,22 @@
 import './App.css'
 import '@mantine/core/styles.css';
 
-import {AppShell, createTheme, MantineProvider, NavLink, Stack, ThemeIcon} from '@mantine/core';
-import {useDisclosure} from "@mantine/hooks";
+import { AppShell, createTheme, MantineProvider, NavLink, Stack, ThemeIcon } from '@mantine/core';
+import { useDisclosure } from "@mantine/hooks";
 import Header from "./components/AppShell/Header.tsx";
-import {IoBriefcase, IoHome} from "react-icons/io5";
-import {MdContactMail} from "react-icons/md";
-import {FaListAlt} from "react-icons/fa";
-import {GiChemicalTank} from "react-icons/gi";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { IoBriefcase, IoHome } from "react-icons/io5";
+import { MdContactMail } from "react-icons/md";
+import { FaListAlt } from "react-icons/fa";
+import { GiChemicalTank } from "react-icons/gi";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import WelcomePage from "./components/Welcome/WelcomePage.tsx";
 import ContactsPage from "./components/Contacts/ContactsPage.tsx";
 import CatalogPage from "./components/Catalog/CatalogPage.tsx";
+import StrainPage from './components/Strain/StrainPage.tsx';
+import { NavBar } from './components/AppShell/NavBar.tsx';
+import React from 'react';
+import authStore from './stores/User.ts';
+import AdminPage from './components/Admin/AdminPage.tsx';
 
 const theme = createTheme({
     primaryColor: 'green',
@@ -41,65 +46,40 @@ export function isMobile() {
     return window.innerWidth < 1024
 }
 
+export const AuthContext = React.createContext(authStore);
+
 function App() {
-    const [opened, {toggle}] = useDisclosure();
+    const [opened, { toggle }] = useDisclosure();
     return (
         <MantineProvider theme={theme}>
-            <AppShell
-                header={{height: 100}}
-                navbar={{
-                    width: 250,
-                    breakpoint: 'sm',
-                    collapsed: {mobile: !opened},
-                }}
-                padding={'md'}
-            >
-                <Header opened={opened} toggle={toggle}/>
+            <AuthContext.Provider value={authStore}>
+                <AppShell
+                    header={{ height: 100 }}
+                    navbar={{
+                        width: 250,
+                        breakpoint: 'sm',
+                        collapsed: { mobile: !opened },
+                    }}
+                    padding={'md'}
+                >
+                    <Header opened={opened} toggle={toggle} />
 
-                <AppShell.Navbar p="md">
-                    <Stack align={'start'} gap={10}>
-                        <NavLink
-                            href={'/'}
-                            label="Добро пожаловать!"
-                            leftSection={<ThemeIcon variant={'light'}><IoHome size={16}/></ThemeIcon>}
-                        />
+                    <NavBar />
 
-                        <NavLink
-                            label="Услуги"
-                            leftSection={<ThemeIcon variant={'light'}><IoBriefcase size={16}/></ThemeIcon>}
-                        />
+                    <AppShell.Main>
+                        <BrowserRouter>
+                            <Routes>
 
-                        <NavLink
-                            href={'/catalog'}
-                            label="Каталог ВКМ"
-                            leftSection={<ThemeIcon variant={'light'}><FaListAlt size={16}/></ThemeIcon>}
-                        />
-
-                        <NavLink
-                            label="Заказ штаммов"
-                            leftSection={<ThemeIcon variant={'light'}><GiChemicalTank size={16}/></ThemeIcon>}
-                        />
-
-                        <NavLink
-                            href={'/contacts'}
-                            label="Контакты"
-                            leftSection={<ThemeIcon variant={'light'}><MdContactMail size={16}/></ThemeIcon>}
-                        />
-
-                    </Stack>
-                </AppShell.Navbar>
-
-                <AppShell.Main>
-                    <BrowserRouter>
-                        <Routes>
-
-                            <Route path={'/'} element={<WelcomePage/>}/>
-                            <Route path={'/contacts'} element={<ContactsPage/>}/>
-                            <Route path={'/catalog'} element={<CatalogPage/>}/>
-                        </Routes>
-                    </BrowserRouter>
-                </AppShell.Main>
-            </AppShell>
+                                <Route path={'/'} element={<WelcomePage />} />
+                                <Route path={'/contacts'} element={<ContactsPage />} />
+                                <Route path={'/catalog'} element={<CatalogPage />} />
+                                <Route path={'/strain/:id'} element={<StrainPage />} />
+                                <Route path={'/admin'} element={<AdminPage />} />
+                            </Routes>
+                        </BrowserRouter>
+                    </AppShell.Main>
+                </AppShell>
+            </AuthContext.Provider>
         </MantineProvider>
     )
 }
