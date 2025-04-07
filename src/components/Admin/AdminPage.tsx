@@ -2,119 +2,61 @@ import { ActionIcon, Badge, Button, CopyButton, Group, PasswordInput, Select, St
 import ContentBlock from "../App/ContentBlock";
 import { FiCheck, FiCopy, FiX } from "react-icons/fi";
 import { IUser, ROOTS } from "../../stores/User";
+import { useEffect, useState } from "react";
+import api from "../../../axiosConfig";
+import { StrainData, StrainDataShort } from "../../stores/Strain";
 
+type EditRequest = {
+    strain: StrainDataShort,
+    changedBy: IUser
+    changes: Partial<StrainData>,
+    createdAt: string,
+    updatedAt: string,
+    approved: boolean
+}
 
-const editRequests = [
-    {
-        action: 'Добавление',
-        actionColor: 'green',
-        initiator: 'Иван Иванович',
-        microorganism: 'Metarhizium robertsii',
-    },
-    {
-        action: 'Удаление',
-        actionColor: 'red',
-        initiator: 'Иван Иванович',
-        microorganism: 'Metarhizium robertsii',
-    },
-    {
-        action: 'Редактирование',
-        actionColor: 'gray',
-        initiator: 'Иван Иванович',
-        microorganism: 'Metarhizium robertsii',
-    }
-]
-
-const users: IUser[] = [
-    {
-        id: 1,
-        username: 'admin',
-        password: 'admin',
-        email: 'admin@vk.com',
-        roots: 1
-    },
-    {
-        id: 2,
-        username: 'user',
-        password: 'user',
-        email: 'user@vk.com',
-        roots: 0
-    },
-    {
-        id: 3,
-        username: 'user1',
-        password: 'user1',
-        email: 'user1@vk.com',
-        roots: 0
-    },
-    {
-        id: 4,
-        username: 'user2',
-        password: 'user2',
-        email: 'user2@vk.com',
-        roots: 0
-    },
-    {
-        id: 5,
-        username: 'user3',
-        password: 'user3',
-        email: 'user3@vk.com',
-        roots: 0
-    },
-    {
-        id: 6,
-        username: 'user4',
-        password: 'user4',
-        email: 'user4@vk.com',
-        roots: 0
-    },
-    {
-        id: 7,
-        username: 'user5',
-        password: 'user5',
-        email: 'user5@vk.com',
-        roots: 0
-    },
-    {
-        id: 8,
-        username: 'user6',
-        password: 'user6',
-        email: 'user6@vk.com',
-        roots: 0
-    },
-    {
-        id: 9,
-        username: 'user7',
-        password: 'user7',
-        email: 'user7@vk.com',
-        roots: 0
-    },
-    {
-        id: 10,
-        username: 'user8',
-        password: 'user8',
-        email: 'user8@vk.com',
-        roots: 0
-    },
-    {
-        id: 11,
-        username: 'user9',
-        password: 'user9',
-        email: 'user9@vk.com',
-        roots: 0
-    },
-    {
-        id: 12,
-        username: 'user10',
-        password: 'user10',
-        email: 'user10@vk.com',
-        roots: 0
-    },
-]
+type AddRequest = {
+    createdBy: IUser,
+    changes: Partial<StrainData>,
+    createdAt: string,
+    updatedAt: string,
+    approved: boolean
+}
 
 
 const AdminPage: React.FC = () => {
 
+    const [editRequests, setEditRequests] = useState<EditRequest[]>([])
+    const [addRequests, setAddRequests] = useState<AddRequest[]>([])
+    const [users, setUsers] = useState<IUser[]>([])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const dataEdit = (await api.get('strains/get_changed_strains/')).data;
+                setEditRequests(dataEdit.results);
+            }
+            catch (e) {
+                console.log(e);
+            }
+            
+
+            try {
+                const dataAdd = (await api.get('strains/get_new_strains/')).data;
+                setAddRequests(dataAdd.results);
+            } catch (e) {
+                console.log(e);
+            }
+
+            try {
+                const dataUsers = (await api.get('auth/users_list/')).data;
+                setUsers(dataUsers.results);
+            } catch (e) {
+                console.log(e);
+            }
+
+        })()
+    }, [])
 
     return (
         <Stack align={'center'} gap={40}>
@@ -140,18 +82,50 @@ const AdminPage: React.FC = () => {
                     </Table.Thead>
                     <Table.Tbody>
                         {
-                            editRequests.map((request, index) => (
+                            addRequests.map((request, index) => (
                                 <Table.Tr key={index}>
                                     <Table.Td>
-                                        <Badge size='lg' color={request.actionColor}>
-                                            {request.action}
+                                        <Badge size='lg' color='gray'>
+                                            Edit
                                         </Badge>
                                     </Table.Td>
                                     <Table.Td>
-                                        {request.initiator}
+                                        {request.createdBy.username}
                                     </Table.Td>
                                     <Table.Td>
-                                        {request.microorganism}
+                                        {request.changes.NameAndTaxonomy?.Genus + ' ' + request.changes.NameAndTaxonomy?.Species}
+                                    </Table.Td>
+                                    <Table.Td w='150px'>
+                                        <Button size="md" variant="default">
+                                            Подробнее
+                                        </Button>
+                                    </Table.Td>
+                                    <Table.Td w='150px'>
+                                        <Group gap={5} w='100%' justify="end">
+                                            <Button size="md" variant="filled" color="red">
+                                                <FiX />
+                                            </Button>
+                                            <Button size="md" variant="filled" color="green">
+                                                <FiCheck />
+                                            </Button>
+                                        </Group>
+                                    </Table.Td>
+                                </Table.Tr>
+                            ))
+                        }
+                        {
+                            editRequests.map((request, index) => (
+                                <Table.Tr key={index}>
+                                    <Table.Td>
+                                        <Badge size='lg' color='gray'>
+                                            Edit
+                                        </Badge>
+                                    </Table.Td>
+                                    <Table.Td>
+                                        {request.changedBy.username}
+                                    </Table.Td>
+                                    <Table.Td>
+                                        {request.strain.Genus + ' ' + request.strain.Species}
                                     </Table.Td>
                                     <Table.Td w='150px'>
                                         <Button size="md" variant="default">
@@ -221,7 +195,7 @@ const AdminPage: React.FC = () => {
                                             </CopyButton>
                                         } />
                                     </Table.Td>
-                                    <Table.Td maw={120}>
+                                    {/* <Table.Td maw={120}>
                                         <PasswordInput value={user.password} rightSection={
                                             <CopyButton value={user.password} timeout={2000}>
                                                 {({ copied, copy }) => (
@@ -233,7 +207,7 @@ const AdminPage: React.FC = () => {
                                                 )}
                                             </CopyButton>
                                         } />
-                                    </Table.Td>
+                                    </Table.Td> */}
                                     <Table.Td maw={120}>
                                         <TextInput value={user.email} rightSection={
                                             <CopyButton value={user.email} timeout={2000}>

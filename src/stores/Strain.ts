@@ -189,15 +189,18 @@ export class Strain {
     }
 
     static async fetchOne(query: string): Promise<Strain | null> {
-        const response = (await import('../samples/response_to_one_strain.json')).default as StrainData;
-        return new Strain(response);
+        //const response = (await import('../samples/response_to_one_strain.json')).default as StrainData;
+        //return new Strain(response);
+
+        const { data } = await api.get(`/strains/${query}`);
+        return data ? new Strain(data) : null;
     }
 
     static async search(query: string, limit: number, offset: number): Promise<Strain[]> {
-        // const { data } = await api.get(`/strains/search/?q=${query}`);
-        // return data.map((strain: StrainData) => new Strain(strain));
+        const { data } = await api.get(`/strains/search/?q=${query}`);
+        return data.map((strain: StrainData) => new Strain(strain));
 
-        const strain_id = Number(query);
+        /*const strain_id = Number(query);
         const response = (await import('../samples/response_to_strains_list.json')).default as StrainDataShort[];
         let filteredData: StrainDataShort[] = []
         if (Number.isNaN(strain_id)) {
@@ -206,7 +209,7 @@ export class Strain {
             filteredData = filteredData.concat(response.filter(strain => strain.strain_id === strain_id));
         }
         console.log(filteredData)
-        return filteredData.map((strain: StrainDataShort) => new Strain(strain));
+        return filteredData.map((strain: StrainDataShort) => new Strain(strain));*/
     }
 
 }

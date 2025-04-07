@@ -1,79 +1,104 @@
 import { makeAutoObservable } from "mobx";
+import api, { setAuthToken } from "../../axiosConfig";
 
-// Интерфейс для данных пользователя (адаптируйте поля в соответствии с моделью из VKMauth)
 export type IUser = {
   id: number;
   username: string;
-  password: string;
   email: string;
   roots: number;
-  // Можно добавить другие поля, если они есть
+  first_name: string;
+  last_name: string;
+  date_joined: string;
+  isModerator: boolean;
 }
 
 export const ROOTS: { [key: number]: string } = {
     0: 'User',
     1: 'Moderator'
 }
-
 class AuthStore {
-  token: string | null = null;
+  accessToken: string | null = null;
+  refreshToken: string | null = null;
   isAuthenticated: boolean = false;
   user: IUser | null = null;
-  
-  // URL для запроса логина. Обновите согласно настройкам вашего бэкенда.
-  authUrl: string = "http://localhost:8000/vkmauth/login/";
 
   constructor() {
     makeAutoObservable(this);
-    // Восстанавливаем токен из localStorage, если он есть
-    this.token = localStorage.getItem("token");
-    this.isAuthenticated = !!this.token;
+    /*this.accessToken = localStorage.getItem("accessToken");
+    this.refreshToken = localStorage.getItem("refreshToken");
+
+    setAuthToken(this.accessToken);
+    this.checkAuthStatus();*/
   }
 
-  // Метод установки токена
-  setToken(token: string) {
-    this.token = token;
-    localStorage.setItem("token", token);
+  async init() {
+    const access = localStorage.getItem("accessToken");
+    const refresh = localStorage.getItem("refreshToken");
+  
+    if (access && refresh) {
+      this.accessToken = access;
+      this.refreshToken = refresh;
+      setAuthToken(access);
+      await this.checkAuthStatus();
+    }
+  }
+
+  setTokens(access: string, refresh: string) {
+    this.accessToken = access;
+    this.refreshToken = refresh;
+    localStorage.setItem("accessToken", access);
+    localStorage.setItem("refreshToken", refresh);
+    setAuthToken(access);
     this.isAuthenticated = true;
   }
 
-  // Выход: сбрасываем данные
-  logout() {
-    this.token = null;
+  clearTokens() {
+    this.accessToken = null;
+    this.refreshToken = null;
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setAuthToken(null);
     this.isAuthenticated = false;
-    this.user = null;
-    localStorage.removeItem("token");
   }
 
-  // Вход в систему: отправка запроса к бэкенду
   async login(username: string, password: string): Promise<void> {
     try {
-      const response = await fetch(this.authUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await api.post("/auth/login/", { username, password });
+      const { access, refresh, user } = res.data;
 
-      if (!response.ok) {
-        throw new Error("Ошибка авторизации");
-      }
-
-      const data = await response.json();
-
-      // Предполагается, что бэкенд возвращает JWT токен и данные пользователя
-      if (data.token) {
-        this.setToken(data.token);
-        if (data.user) {
-          this.user = data.user;
-        }
+      if (access && refresh && user) {
+        this.setTokens(access, refresh);
+        this.user = user;
       } else {
-        throw new Error("JWT токен не получен");
+        throw new Error("Некорректный ответ от сервера");
       }
-    } catch (error) {
-      console.error("Ошибка при авторизации:", error);
-      throw error;
+    } catch (err: any) {
+      const msg = err.response?.data?.error?.ru || "Ошибка авторизации";
+      throw new Error(msg);
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await api.post("/auth/logout/");
+    } catch (err) {
+      console.warn("Ошибка при выходе из системы:", err);
+    } finally {
+      this.clearTokens();
+      this.user = null;
+    }
+  }
+
+  async checkAuthStatus(): Promise<void> {
+    if (!this.accessToken) return;
+
+    try {
+      const res = await api.get("/auth/status/");
+      this.isAuthenticated = res.data.isAuthenticated;
+      this.user = res.data.user;
+    } catch (err) {
+      this.clearTokens();
+      this.user = null;
     }
   }
 }

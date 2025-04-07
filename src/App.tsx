@@ -14,7 +14,7 @@ import ContactsPage from "./components/Contacts/ContactsPage.tsx";
 import CatalogPage from "./components/Catalog/CatalogPage.tsx";
 import StrainPage from './components/Strain/StrainPage.tsx';
 import { NavBar } from './components/AppShell/NavBar.tsx';
-import React from 'react';
+import React, { useEffect } from 'react';
 import authStore from './stores/User.ts';
 import AdminPage from './components/Admin/AdminPage.tsx';
 
@@ -50,6 +50,11 @@ export const AuthContext = React.createContext(authStore);
 
 function App() {
     const [opened, { toggle }] = useDisclosure();
+
+    useEffect(() => {
+        authStore.init();
+    }, [])
+
     return (
         <MantineProvider theme={theme}>
             <AuthContext.Provider value={authStore}>
