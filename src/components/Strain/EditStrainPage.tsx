@@ -32,7 +32,12 @@ const EditStrainPage: React.FC<{strain?: Strain}> = ({strain}) => {
 
     const handleSave = async () => {
         try {
-            await api.post('/strains/add', {changes: strainData});
+            if (!id){
+                await api.post('/strains/add', {changes: strainData});
+            }
+            else {
+                await api.post(`/strains/${id}/edit/`, {changes: strainData});
+            }
         } catch (e) {
             console.error(e)
         }
