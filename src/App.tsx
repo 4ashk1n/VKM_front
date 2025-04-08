@@ -17,6 +17,7 @@ import { NavBar } from './components/AppShell/NavBar.tsx';
 import React, { useEffect } from 'react';
 import authStore from './stores/User.ts';
 import AdminPage from './components/Admin/AdminPage.tsx';
+import EditStrainPage from './components/Strain/EditStrainPage.tsx';
 
 const theme = createTheme({
     primaryColor: 'green',
@@ -80,6 +81,9 @@ function App() {
                                 <Route path={'/catalog'} element={<CatalogPage />} />
                                 <Route path={'/strain/:id'} element={<StrainPage />} />
                                 <Route path={'/admin'} element={<AdminPage />} />
+                                <Route path={'/strain/add'} element={<EditStrainPage />} />
+                                <Route path={'/strain/:id/edit'} element={<EditStrainPage />} />
+
                             </Routes>
                         </BrowserRouter>
                     </AppShell.Main>

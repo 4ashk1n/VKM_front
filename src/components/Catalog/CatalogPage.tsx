@@ -1,9 +1,11 @@
-import {Center, Divider, Grid, Loader, Stack, Text, TextInput, Title} from "@mantine/core";
-import {FiSearch} from "react-icons/fi";
-import {useEffect, useRef, useState} from "react";
+import { Button, Center, Divider, Grid, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
+import { FiPlus, FiSearch } from "react-icons/fi";
+import { useContext, useEffect, useRef, useState } from "react";
 import api from "../../../axiosConfig.ts";
 import { Strain } from "../../stores/Strain.ts";
 import StrainCard from "./StrainCard.tsx";
+import authStore from "../../stores/User.ts";
+import { AuthContext } from "../../App.tsx";
 
 
 const CatalogPage: React.FC = () => {
@@ -14,6 +16,8 @@ const CatalogPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [strains, setStrains] = useState<Strain[]>([]);
 
+    const { isAuthenticated } = useContext(AuthContext);
+
     useEffect(() => {
         if (query === '') {
             setStrains([]);
@@ -22,11 +26,16 @@ const CatalogPage: React.FC = () => {
             setLoading(true)
             const currentQuery = query;
             setTimeout(async () => {
-                console.log(1)
-                if (!ref.current || currentQuery !== ref.current.value){
+
+                if (!ref.current || currentQuery !== ref.current.value) {
                     return;
                 }
-                console.log(2)
+
+                if (ref.current.value == '') {
+                    setStrains([]);
+                    setLoading(false);
+                    return;
+                }
 
                 const data = await Strain.search(ref.current.value, 10, 0);
                 setStrains(data);
@@ -38,7 +47,15 @@ const CatalogPage: React.FC = () => {
 
     return (
         <Stack align={'center'} gap={40}>
-            <Title>Каталог</Title>
+            <Stack align='center' gap={10}>
+                <Title>Каталог</Title>
+                {
+                    isAuthenticated ?
+                        <Button size='md' variant="default" leftSection={<FiPlus />}>Добавить</Button>
+                        : null
+                }
+            </Stack>
+
 
             <TextInput
                 ref={ref}
@@ -49,29 +66,29 @@ const CatalogPage: React.FC = () => {
                 w={'30%'}
                 miw={300}
                 onChange={(e) => setQuery(e.target.value)}
-            />  
+            />
 
             <Grid w={'100%'}>
                 {
                     strains.map((strain) => {
                         return (
                             <Grid.Col span={4}>
-                                <StrainCard strain={strain} key={strain.data.strain_id}/>
+                                <StrainCard strain={strain} key={strain.data.strain_id} />
                             </Grid.Col>
                         )
                     })
                 }
 
                 {
-                    loading ? 
+                    loading ?
                         <Grid.Col span={12}>
                             <Center w='100%'>
-                                <Loader size='md' color='green'/>
+                                <Loader size='md' color='green' />
                             </Center>
                         </Grid.Col>
                         : null
                 }
-                
+
             </Grid>
         </Stack>
     );

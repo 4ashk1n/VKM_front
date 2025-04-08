@@ -212,4 +212,167 @@ export class Strain {
         return filteredData.map((strain: StrainDataShort) => new Strain(strain));*/
     }
 
+    static createEmpty() {
+        return new Strain({
+            strain_id: 0,
+            NameAndTaxonomy: {
+                CollectionCode: '',
+                Subcollection: '',
+                Subcollection1: '',
+                Genus: '',
+                Species: '',
+                Variant: '',
+                Forma: '',
+                FormaSpecies: '',
+                Strain: 0,
+                AuthoritySp: '',
+                AuthoritySubSp: '',
+                Family: '',
+                Order: '',
+                Class: '',
+                Synonym: '',
+                TaxonomicID: '',
+                Current_Name_DSMZ_MycoBank: '',
+                Link_to_TaxonomicID: '',
+                Pathogenicgroup: '',
+                Risk_group: '',
+                SanPin: '',
+                State: '',
+                Type: {
+                    en: '',
+                    ru: '',
+                },
+                Qouts: '',
+                OtherName: '',
+                ClassShort: '',
+                References: '',
+                References_nc: '',
+                Race: '',
+                Serovar: '',
+                OtherCol: '',
+            },
+            History: {
+                ReceivedFrom: {
+                    en: '',
+                    ru: '',
+                },
+                Depositor: {
+                    en: '',
+                    ru: '',
+                },
+                ReceivedAs: '',
+                ReceivedDate: '',
+                AccessionDate: '',
+                TypeOfSubstrate: {
+                    en: '',
+                    ru: '',
+                },
+                IsolatedFrom: {
+                    en: '',
+                    ru: '',
+                },
+                AnatomicPart: {
+                    en: '',
+                    ru: '',
+                },
+                Location: {
+                    en: '',
+                    ru: '',
+                },
+                Geographics: {
+                    en: '',
+                    ru: '',
+                },
+                Country: {
+                    en: '',
+                    ru: '',
+                },
+                USSR: '',
+                CollectedBy: {
+                    en: '',
+                    ru: '',
+                },
+                CollectedDate: '',
+                IsolationDate: '',
+                IsolatedBy: {
+                    en: '',
+                    ru: '',
+                },
+                IsolateNumber: {
+                    en: '',
+                    ru: '',
+                },
+                IdentificateBy: {
+                    en: '',
+                    ru: '',
+                },
+                IdentificateDate: '',
+            },
+            CultivationAndStorage: {
+                IncubationTemp: '',
+                Tested_temperature_growth_range: '',
+                GrowthMedium: '',
+                GrowthCondition: {
+                    en: '',
+                    ru: '',
+                },
+                StorageMethods: '',
+                StorageFreeze: '',
+                StorageOil: '',
+                StorageSilicagel: '',
+                StorageWater: '',
+                StorageNitrogen: '',
+                StorageSubcultivation: '',
+                StorageSoil: '',
+            },
+            StrainCharacteristics: {
+                EnzymeProduction: {
+                    en: '',
+                    ru: '',
+                },
+                MetaboliteProduction: {
+                    en: '',
+                    ru: '',
+                },
+                Transformation: {
+                    en: '',
+                    ru: '',
+                },
+                Degradation: {
+                    en: '',
+                    ru: '',
+                },
+                Other: {
+                    en: '',
+                    ru: '',
+                },
+                MatingType: '',
+                DNA_Sequence_Accession_Numbers: '',
+            },
+            GeneralInformation: {
+                Latitude: '',
+                Longitude: '',
+                Altitude: '',
+                Curator: '',
+                Category: '',
+                Restrictions_on_use: '',
+                Remarks: '',
+                EntryDate: '',
+                EditDate: '',
+                Reidentif: {
+                    en: '',
+                    ru: '',
+                },
+                Confidential_Information: '',
+                Application: {
+                    en: '',
+                    ru: '',
+                },
+                Form_of_supply: '',
+                Report2020: '',
+                Report2021: '',
+            }
+        }); 
+    }
+
 }
