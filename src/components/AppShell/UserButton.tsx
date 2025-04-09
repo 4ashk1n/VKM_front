@@ -8,7 +8,7 @@ import { FiLogOut } from "react-icons/fi";
 const UserButton: React.FC = observer(() => {
 
     const authStore = useContext(AuthContext);
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [opened, { toggle }] = useDisclosure();
 
     const usernameRef = useRef<HTMLInputElement>(null);
@@ -40,7 +40,7 @@ const UserButton: React.FC = observer(() => {
                     </Stack>
                 </Group>
             </Button>
-            <Button h='100%' variant='default' p={15} styles={{ inner: { width: '100%', display: 'block' } }} radius={0} mr={-1}>
+            <Button onClick={() => authStore.logout()} h='100%' variant='default' p={15} styles={{ inner: { width: '100%', display: 'block' } }} radius={0} mr={-1}>
                 <FiLogOut />
             </Button>
         </Group>
