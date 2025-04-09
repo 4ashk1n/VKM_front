@@ -1,4 +1,4 @@
-import { Button, Center, Divider, Grid, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Button, Center, Divider, Grid, Group, Loader, Pagination, Stack, Text, TextInput, Title } from "@mantine/core";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import { useContext, useEffect, useRef, useState } from "react";
 import api from "../../../axiosConfig.ts";
@@ -8,7 +8,9 @@ import authStore from "../../stores/User.ts";
 import { AuthContext } from "../../App.tsx";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Catalog, CatalogContext } from "../../stores/Catalog.ts";
 
+const catalogStore = new Catalog()
 
 const CatalogPage: React.FC = () => {
 
@@ -17,6 +19,9 @@ const CatalogPage: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
     const [strains, setStrains] = useState<Strain[]>([]);
+
+    const [page, setPage] = useState(0)
+
 
     const { isAuthenticated } = useContext(AuthContext);
 
@@ -35,68 +40,83 @@ const CatalogPage: React.FC = () => {
                     return;
                 }
 
-                if (ref.current.value == '') {
-                    setStrains([]);
-                    setLoading(false);
-                    return;
-                }
-
-                const data = await Strain.search(ref.current.value, 10, 0);
-                setStrains(data);
-                setLoading(false);
+                catalogStore.setQuery(query);
             }, 1000)
 
         }
     }, [query]);
 
+    useEffect(() => {
+        catalogStore.setPage(page);
+        (async () => {
+            setStrains(await catalogStore.getItemsOnCurrentPage());
+        })()
+    }, [page, catalogStore.query])
+
     return (
-        <Stack align={'center'} gap={40}>
-            <Stack align='center' gap={10}>
-                <Title>{t("Каталог")}</Title>
-                {
-                    isAuthenticated ?
-                        <NavLink to='/strain/add'>
-                        <Button size='md' variant="default"  leftSection={<FiPlus />}>{t("Add")}</Button>
-                        </NavLink>
-                        : null
-                }
-            </Stack>
+        <CatalogContext.Provider value={catalogStore}>
+            <Stack align={'center'} gap={40}>
+                <Stack align='center' gap={10}>
+                    <Title>{t("Каталог")}</Title>
+                    {
+                        isAuthenticated ?
+                            <NavLink to='/strain/add'>
+                                <Button size='md' variant="default" leftSection={<FiPlus />}>{t("Add")}</Button>
+                            </NavLink>
+                            : null
+                    }
+                </Stack>
 
 
-            <TextInput
-                ref={ref}
-                leftSection={<FiSearch size={24} />}
-                placeholder={t('Поиск')}
-                variant={'default'}
-                size={'lg'}
-                w={'30%'}
-                miw={300}
-                onChange={(e) => setQuery(e.target.value)}
-            />
+                <Group gap={20} wrap='nowrap' justify="space-between" w='100%'>
+                    <TextInput
+                        ref={ref}
+                        leftSection={<FiSearch size={24} />}
+                        placeholder={t('Поиск')}
+                        variant={'default'}
+                        size={'lg'}
+                        w={'50%'}
+                        miw={300}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <Group w='50%' align="center" justify="end" gap={10} wrap='nowrap'>
+                        <Text size='md'>
+                            {`Showing ${catalogStore.limit * (page) + 1} – ${Math.min(catalogStore.totalResults, catalogStore.limit * (page + 1))} of ${catalogStore.totalResults}`}
+                        </Text>
+                        <Pagination size='lg' withPages={false} total={catalogStore.totalPages} value={page + 1} onChange={(val) => setPage(val - 1)} />
+                        
+                    </Group>
+                    
+                </Group>
 
-            <Grid w={'100%'}>
-                {
-                    strains.map((strain) => {
-                        return (
-                            <Grid.Col span={4}>
-                                <StrainCard strain={strain} key={strain.data.strain_id} />
+
+
+
+                <Grid w={'100%'}>
+                    {
+                        strains.map((strain) => {
+                            return (
+                                <Grid.Col span={4}>
+                                    <StrainCard strain={strain} key={strain.data.strain_id} />
+                                </Grid.Col>
+                            )
+                        })
+                    }
+
+                    {
+                        loading ?
+                            <Grid.Col span={12}>
+                                <Center w='100%'>
+                                    <Loader size='md' color='green' />
+                                </Center>
                             </Grid.Col>
-                        )
-                    })
-                }
+                            : null
+                    }
 
-                {
-                    loading ?
-                        <Grid.Col span={12}>
-                            <Center w='100%'>
-                                <Loader size='md' color='green' />
-                            </Center>
-                        </Grid.Col>
-                        : null
-                }
+                </Grid>
 
-            </Grid>
-        </Stack>
+            </Stack>
+        </CatalogContext.Provider>
     );
 };
 

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import api from "../../../axiosConfig";
 import { StrainData, StrainDataShort } from "../../stores/Strain";
 import { useTranslation } from "react-i18next";
+import UsersTable from "./UsersTable";
 
 type EditRequest = {
     strain: StrainDataShort,
@@ -31,7 +32,6 @@ const AdminPage: React.FC = () => {
 
     const [editRequests, setEditRequests] = useState<EditRequest[]>([])
     const [addRequests, setAddRequests] = useState<AddRequest[]>([])
-    const [users, setUsers] = useState<IUser[]>([])
 
     useEffect(() => {
         (async () => {
@@ -50,14 +50,6 @@ const AdminPage: React.FC = () => {
             } catch (e) {
                 console.log(e);
             }
-
-            try {
-                const dataUsers = (await api.get('auth/users_list/')).data;
-                setUsers(dataUsers.results);
-            } catch (e) {
-                console.log(e);
-            }
-
         })()
     }, [])
 
@@ -154,94 +146,9 @@ const AdminPage: React.FC = () => {
 
             </ContentBlock>
 
-            <ContentBlock w='100%' p={'15px 0 0 0'} title="Пользователи">
-                <Table w='100%' >
-                    <Table.Thead>
-                        <Table.Tr>
-                            <Table.Th>
-                                ID
-                            </Table.Th>
-                            <Table.Th>
-                                {t("Username")}
-                            </Table.Th>
-                            <Table.Th>
-                                {t("Name")}
-                            </Table.Th>
-                            <Table.Th>
-                                {t("Email")}
-                            </Table.Th>
-                            <Table.Th>
-                                {t("Role")}
-                            </Table.Th>
-                            <Table.Th w='fit-content'></Table.Th>
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                        {
-                            users.map((user) => (
-                                <Table.Tr key={user.id}>
-                                    <Table.Td>
-                                        <Text c='gray'>
-                                            {user.id}
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td maw={120}>
-                                        <TextInput value={user.username} rightSection={
-                                            <CopyButton value={user.username} timeout={2000}>
-                                                {({ copied, copy }) => (
-                                                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                                                        <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
-                                                            {copied ? <FiCheck size={16} /> : <FiCopy size={16} />}
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                )}
-                                            </CopyButton>
-                                        } />
-                                    </Table.Td>
-                                    {/* <Table.Td maw={120}>
-                                        <PasswordInput value={user.password} rightSection={
-                                            <CopyButton value={user.password} timeout={2000}>
-                                                {({ copied, copy }) => (
-                                                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                                                        <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
-                                                            {copied ? <FiCheck size={16} /> : <FiCopy size={16} />}
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                )}
-                                            </CopyButton>
-                                        } />
-                                    </Table.Td> */}
-                                    <Table.Td maw={120}>
-                                        <TextInput value={user.email} rightSection={
-                                            <CopyButton value={user.email} timeout={2000}>
-                                                {({ copied, copy }) => (
-                                                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                                                        <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
-                                                            {copied ? <FiCheck size={16} /> : <FiCopy size={16} />}
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                )}
-                                            </CopyButton>
-                                        } />
-                                    </Table.Td>
-                                    <Table.Td maw={120}>
-                                        <Select data={Object.values(ROOTS)} value={ROOTS[user.roots]} size='md' />
-                                    </Table.Td>
-                                    <Table.Td w='150px'>
-                                        <Group gap={5} w='100%' justify="end">
-                                            <Button size="md" variant="filled" color="red">
-                                                <FiX />
-                                            </Button>
-                                        </Group>
-                                    </Table.Td>
-                                </Table.Tr>
-                            ))
-                        }
-                    </Table.Tbody>
-                </Table>
 
-
-            </ContentBlock>
+            <UsersTable />
+            
 
         </Stack>
     );
