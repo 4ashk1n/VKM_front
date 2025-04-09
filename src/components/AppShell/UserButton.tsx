@@ -1,8 +1,9 @@
-import { Button, Group, Avatar, Text, Modal, Title, Stack, TextInput, PasswordInput } from "@mantine/core";
+import { Button, Group, Avatar, Text, Modal, Title, Stack, TextInput, PasswordInput, ActionIcon } from "@mantine/core";
 import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../App";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
+import { FiLogOut } from "react-icons/fi";
 
 const UserButton: React.FC = observer(() => {
 
@@ -25,12 +26,24 @@ const UserButton: React.FC = observer(() => {
     }
 
     if (user) {
-        return (
-            <Button variant='default' p={15} styles={{ inner: { width: '100%', display: 'block' } }} h='fit-content' radius={0} mr={-1}>
-                <Group w='100%' justify='space-between' h='100%'>
+        return (<Group w='100%' justify="space-between" wrap="nowrap" h='fit-content' gap={0}>
+            <Button w='100%' variant='default' p={15} styles={{ inner: { width: '100%', display: 'block' } }} h='fit-content' radius={0} mr={-1}>
+                <Group w='100%' gap={10} h='100%'>
                     <Avatar color='green' />
+                    <Stack gap={0} align="start">
+                        <Text size='lg' fw={600} c='green'>
+                            {user.username}
+                        </Text>
+                        <Text size='sm' c='gray'>
+                            {user.email}
+                        </Text>
+                    </Stack>
                 </Group>
             </Button>
+            <Button h='100%' variant='default' p={15} styles={{ inner: { width: '100%', display: 'block' } }} radius={0} mr={-1}>
+                <FiLogOut />
+            </Button>
+        </Group>
         )
     }
     else {
@@ -50,9 +63,9 @@ const UserButton: React.FC = observer(() => {
                         <Button size="md" onClick={handleLogin} w='100%' mt={20}>Sign in</Button>
                         <Button size="md" onClick={toggle} w='100%' variant='default'>Cancel</Button>
                         {
-                            error ? 
+                            error ?
                                 <Text color='red' size="sm">{error}</Text>
-                            : null
+                                : null
                         }
                     </Stack>
                 </Modal>

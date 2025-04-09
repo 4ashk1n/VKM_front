@@ -6,6 +6,8 @@ import { Strain } from "../../stores/Strain.ts";
 import StrainCard from "./StrainCard.tsx";
 import authStore from "../../stores/User.ts";
 import { AuthContext } from "../../App.tsx";
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 
 const CatalogPage: React.FC = () => {
@@ -17,6 +19,8 @@ const CatalogPage: React.FC = () => {
     const [strains, setStrains] = useState<Strain[]>([]);
 
     const { isAuthenticated } = useContext(AuthContext);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (query === '') {
@@ -48,10 +52,12 @@ const CatalogPage: React.FC = () => {
     return (
         <Stack align={'center'} gap={40}>
             <Stack align='center' gap={10}>
-                <Title>Каталог</Title>
+                <Title>{t("Каталог")}</Title>
                 {
                     isAuthenticated ?
-                        <Button size='md' variant="default" leftSection={<FiPlus />}>Добавить</Button>
+                        <NavLink to='/strain/add'>
+                        <Button size='md' variant="default"  leftSection={<FiPlus />}>{t("Add")}</Button>
+                        </NavLink>
                         : null
                 }
             </Stack>
@@ -60,7 +66,7 @@ const CatalogPage: React.FC = () => {
             <TextInput
                 ref={ref}
                 leftSection={<FiSearch size={24} />}
-                placeholder={'Поиск'}
+                placeholder={t('Поиск')}
                 variant={'default'}
                 size={'lg'}
                 w={'30%'}

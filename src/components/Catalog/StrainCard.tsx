@@ -2,10 +2,13 @@ import { Button, Stack, Table, Text, Title } from "@mantine/core";
 import { Strain, StrainDataShort } from "../../stores/Strain";
 import ContentBlock from "../App/ContentBlock";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 
 const StrainCard: React.FC<{ strain: Strain }> = ({ strain }) => {
     const data = strain.data as StrainDataShort
+
+    const { t, i18n } = useTranslation();
 
     return (
         <ContentBlock p={0} w='100%' h='100%' align={'center'} justify={'space-between'} direction={'column'}>
@@ -22,7 +25,7 @@ const StrainCard: React.FC<{ strain: Strain }> = ({ strain }) => {
                         Object.entries(data).map(([key, value]) => {
                             if (!value || key === 'strain_id') return null;
                             const displayValue = typeof value === 'object' && value !== null && 'en' in value
-                                ? value['en']
+                                ? value[i18n.language as 'en' | 'ru' || 'en']
                                 : value.toString();
 
                             return (
@@ -43,7 +46,7 @@ const StrainCard: React.FC<{ strain: Strain }> = ({ strain }) => {
             <Stack p={0} w='100%'>
                 <NavLink to={`/strain/${strain.data.strain_id}`}>
                     <Button bg='green.1' radius={0} size='md' variant="subtle" w='100%'>
-                        Подробнее
+                        {t("Подробнее")}
                     </Button>
                 </NavLink>
 

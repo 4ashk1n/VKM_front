@@ -5,6 +5,7 @@ import { IUser, ROOTS } from "../../stores/User";
 import { useEffect, useState } from "react";
 import api from "../../../axiosConfig";
 import { StrainData, StrainDataShort } from "../../stores/Strain";
+import { useTranslation } from "react-i18next";
 
 type EditRequest = {
     strain: StrainDataShort,
@@ -26,6 +27,8 @@ type AddRequest = {
 
 const AdminPage: React.FC = () => {
 
+    const { t } = useTranslation();
+
     const [editRequests, setEditRequests] = useState<EditRequest[]>([])
     const [addRequests, setAddRequests] = useState<AddRequest[]>([])
     const [users, setUsers] = useState<IUser[]>([])
@@ -39,7 +42,7 @@ const AdminPage: React.FC = () => {
             catch (e) {
                 console.log(e);
             }
-            
+
 
             try {
                 const dataAdd = (await api.get('strains/get_new_strains/')).data;
@@ -60,21 +63,21 @@ const AdminPage: React.FC = () => {
 
     return (
         <Stack align={'center'} gap={40}>
-            <Title>Панель администратора</Title>
+            <Title>{t("Панель администратора")}</Title>
 
 
-            <ContentBlock w='100%' p={'15px 0 0 0'} title="Каталог микроорганизмов - Заявки">
+            <ContentBlock w='100%' p={'15px 0 0 0'} title={t("Каталог микроорганизмов - Заявки")}>
                 <Table w='100%' >
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th>
-                                Действие
+                                {t('Действие')}
                             </Table.Th>
                             <Table.Th>
-                                Инициатор
+                                {t('Пользователь')}
                             </Table.Th>
                             <Table.Th>
-                                Микроорганизм
+                                {t("Микроорганизм")}
                             </Table.Th>
                             <Table.Th w='fit-content'></Table.Th>
                             <Table.Th w='fit-content'></Table.Th>
@@ -85,8 +88,8 @@ const AdminPage: React.FC = () => {
                             addRequests.map((request, index) => (
                                 <Table.Tr key={index}>
                                     <Table.Td>
-                                        <Badge size='lg' color='gray'>
-                                            Edit
+                                        <Badge size='lg' color='green'>
+                                            {t("Add")}
                                         </Badge>
                                     </Table.Td>
                                     <Table.Td>
@@ -97,7 +100,7 @@ const AdminPage: React.FC = () => {
                                     </Table.Td>
                                     <Table.Td w='150px'>
                                         <Button size="md" variant="default">
-                                            Подробнее
+                                            {t("Подробнее")}
                                         </Button>
                                     </Table.Td>
                                     <Table.Td w='150px'>
@@ -118,7 +121,7 @@ const AdminPage: React.FC = () => {
                                 <Table.Tr key={index}>
                                     <Table.Td>
                                         <Badge size='lg' color='gray'>
-                                            Edit
+                                            {t("Edit")}
                                         </Badge>
                                     </Table.Td>
                                     <Table.Td>
@@ -129,7 +132,7 @@ const AdminPage: React.FC = () => {
                                     </Table.Td>
                                     <Table.Td w='150px'>
                                         <Button size="md" variant="default">
-                                            Подробнее
+                                            {t("Подробнее")}
                                         </Button>
                                     </Table.Td>
                                     <Table.Td w='150px'>
@@ -159,16 +162,16 @@ const AdminPage: React.FC = () => {
                                 ID
                             </Table.Th>
                             <Table.Th>
-                                Username
+                                {t("Username")}
                             </Table.Th>
                             <Table.Th>
-                                Password
+                                {t("Name")}
                             </Table.Th>
                             <Table.Th>
-                                Email
+                                {t("Email")}
                             </Table.Th>
                             <Table.Th>
-                                Role
+                                {t("Role")}
                             </Table.Th>
                             <Table.Th w='fit-content'></Table.Th>
                         </Table.Tr>

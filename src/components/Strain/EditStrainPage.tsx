@@ -71,7 +71,7 @@ const EditStrainPage: React.FC<{strain?: Strain}> = ({strain}) => {
                                             [key: string]: string | number | object;
                                         })[key] || {}).map(([key, value]) => {
                                             console.log(key, value)
-                                            const displayValue: string = typeof value === 'object' && value !== null && 'en' in value
+                                            const displayValue: string = value === null ? '' : typeof value === 'object' && value !== null && 'en' in value
                                                 ? value['en']
                                                 : value.toString();
 

@@ -1,14 +1,17 @@
 import { AxiosError } from "axios";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import api from "../../../axiosConfig";
 import { Strain, StrainData } from "../../stores/Strain";
-import { useEffect, useState } from "react";
-import { Grid, Stack, Table, Title } from "@mantine/core";
+import { useContext, useEffect, useState } from "react";
+import { Button, Grid, Stack, Table, Title } from "@mantine/core";
 import ContentBlock from "../App/ContentBlock";
+import { FiEdit, FiPlus } from "react-icons/fi";
+import { AuthContext } from "../../App";
 
 const StrainPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [strainData, setStrainData] = useState<StrainData | null | undefined>(undefined);
+    const { isAuthenticated } = useContext(AuthContext)
 
     useEffect(() => {
         const fetchStrain = async () => {
@@ -25,6 +28,13 @@ const StrainPage: React.FC = () => {
 
     return <Stack align={'center'} gap={40}>
         <Title>{strainData?.NameAndTaxonomy?.Genus} {strainData?.NameAndTaxonomy?.Species}</Title>
+        {
+            isAuthenticated ?
+                <NavLink to={`/strain/${id}/edit`}>
+                    <Button size='md' variant="default" leftSection={<FiEdit />}>Редактировать</Button>
+                </NavLink>
+                : null
+        }
         <Grid w='100%'>
             {
                 Object.keys(strainData || {}).map((key) => {
