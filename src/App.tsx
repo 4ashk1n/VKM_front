@@ -1,7 +1,7 @@
 import './App.css'
 import '@mantine/core/styles.css';
 
-import { AppShell, createTheme, MantineProvider, NavLink, Stack, ThemeIcon } from '@mantine/core';
+import { AppShell, Center, createTheme, Image, MantineProvider, NavLink, Stack, ThemeIcon } from '@mantine/core';
 import { useDisclosure } from "@mantine/hooks";
 import Header from "./components/AppShell/Header.tsx";
 import { IoBriefcase, IoHome } from "react-icons/io5";
@@ -91,8 +91,14 @@ function App() {
 
                             </Routes>
                         </BrowserRouter>
+                        <Center w='100%'>
+                        <Image src={'/images/logo.svg'} mt={200} mb={200} style={{width: '100%', filter: 'sepia(100%)', opacity: '0.1'}} />
+                        </Center>
+                        
                     </AppShell.Main>
 
+                    
+                    
                     <AppShell.Footer>
                         <Footer />
                     </AppShell.Footer>
