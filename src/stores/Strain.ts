@@ -17,7 +17,7 @@ export type StrainDataShort = {
         ru?: string,
     },
     IsolationDate: string,
-}
+} & Record<string, any>
 
 export type StrainData = {
     strain_id: number,
@@ -178,7 +178,7 @@ export type StrainData = {
         Report2020: string,
         Report2021: string,
     }
-}
+} & Record<string, any>
 
 export class Strain {    
     data: StrainData | StrainDataShort

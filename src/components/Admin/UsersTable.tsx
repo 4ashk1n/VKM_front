@@ -28,12 +28,17 @@ const UsersTable = () => {
         (async () => {
             try {
                 const dataUsers = (await api.get('auth/users_list/')).data;
-                setUsers(dataUsers.results);
+                console.log(dataUsers)
+                setUsers(dataUsers);
             } catch (e) {
                 console.log(e);
             }
         })()
     }, [])
+
+    useEffect(() => {
+        console.log(users)
+    }, users)
 
     const handleCreateUser = async () => {
         if (Object.values(createUserRefs).some((v) => !v || v.current?.value === '' || !(v.current?.value))) {
@@ -99,7 +104,7 @@ const UsersTable = () => {
             <Table.Tbody>
 
                 {
-                    users.map((user) => (
+                    users ? users.map((user) => (
                         <Table.Tr key={user.id}>
                             <Table.Td>
                                 <Text c='gray'>
@@ -107,7 +112,7 @@ const UsersTable = () => {
                                 </Text>
                             </Table.Td>
                             <Table.Td maw={120}>
-                                <TextInput value={user.username} rightSection={
+                                <TextInput value={user.username} size='md' rightSection={
                                     <CopyButton value={user.username} timeout={2000}>
                                         {({ copied, copy }) => (
                                             <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
@@ -118,6 +123,12 @@ const UsersTable = () => {
                                         )}
                                     </CopyButton>
                                 } />
+                            </Table.Td>
+                            <Table.Td>
+                                <Group wrap='nowrap'>
+                                    <TextInput placeholder={t("First name")} ref={createUserRefs.first_name} size='md' w='100%' ></TextInput>
+                                    <TextInput ref={createUserRefs.last_name} size='md' w='100%' placeholder={t("Last name")}></TextInput>
+                                </Group>
                             </Table.Td>
                             {/* <Table.Td maw={120}>
                             <PasswordInput value={user.password} rightSection={
@@ -133,7 +144,7 @@ const UsersTable = () => {
                             } />
                         </Table.Td> */}
                             <Table.Td maw={120}>
-                                <TextInput value={user.email} rightSection={
+                                <TextInput size='md' value={user.email} rightSection={
                                     <CopyButton value={user.email} timeout={2000}>
                                         {({ copied, copy }) => (
                                             <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
@@ -151,17 +162,18 @@ const UsersTable = () => {
                                         label: t(v),
                                         value: v
                                     }
-                                })} value={ROOTS[user.roots]} size='md' />
+                                })} value={user.isModerator ? ROOTS[1] : ROOTS[0]} size='md' />
                             </Table.Td>
                             <Table.Td w='150px'>
                                 <Group gap={5} w='100%' justify="end">
-                                    <Button onClick={() => {setUserToDelete(user); setRemoveUserModalOpened(true);}} size="md" variant="filled" color="red">
+                                    <Button onClick={() => { setUserToDelete(user); setRemoveUserModalOpened(true); }} size="md" variant="filled" color="red">
                                         <FiX />
                                     </Button>
                                 </Group>
                             </Table.Td>
                         </Table.Tr>
                     ))
+                        : null
                 }
             </Table.Tbody>
         </Table>
@@ -204,7 +216,7 @@ const UsersTable = () => {
                         {t('Delete')}
                     </Button>
                 </Group>
-                
+
             </Stack>
         </Modal>
     </ContentBlock>

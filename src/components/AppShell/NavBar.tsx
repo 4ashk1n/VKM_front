@@ -5,9 +5,12 @@ import { GiChemicalTank } from 'react-icons/gi';
 import { MdContactMail } from 'react-icons/md';
 import UserButton from './UserButton';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { AuthContext } from '../../App';
 
 export function NavBar() {
     const { t } = useTranslation()
+    const { user } = useContext(AuthContext);
     return (
         <AppShell.Navbar>
             <Stack justify='space-between' h='100%'>
@@ -16,7 +19,7 @@ export function NavBar() {
                         href={'/'}
                         label={t("Добро пожаловать!")}
                         leftSection={<ThemeIcon variant={'light'}><IoHome size={16} /></ThemeIcon>}
-                        
+
                     />
                     <NavLink
                         label={t("Услуги")}
@@ -38,6 +41,15 @@ export function NavBar() {
                         label={t("Контакты")}
                         leftSection={<ThemeIcon variant={'light'}><MdContactMail size={16} /></ThemeIcon>}
                     />
+                    {
+                        user && user.isModerator ?
+                            <NavLink
+                                href={'/admin'}
+                                label={t("Admin panel")}
+                                leftSection={<ThemeIcon variant={'light'}><MdContactMail size={16} /></ThemeIcon>}
+                            />
+                            : null
+                    }
                 </Stack>
 
                 <UserButton />

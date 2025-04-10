@@ -9,10 +9,11 @@ import { AuthContext } from "../../App.tsx";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Catalog, CatalogContext } from "../../stores/Catalog.ts";
+import { observer } from "mobx-react-lite";
 
 const catalogStore = new Catalog()
 
-const CatalogPage: React.FC = () => {
+const CatalogPage: React.FC = observer(() => {
 
     const [query, setQuery] = useState('');
     const ref = useRef<HTMLInputElement>(null);
@@ -51,7 +52,15 @@ const CatalogPage: React.FC = () => {
         (async () => {
             setStrains(await catalogStore.getItemsOnCurrentPage());
         })()
-    }, [page, catalogStore.query])
+    }, [page])
+
+    useEffect(() => {
+        (async () => {
+            catalogStore.setPage(0)
+            console.log(catalogStore.query)
+            setStrains(await catalogStore.getItemsOnCurrentPage(true));
+        })()
+    }, [catalogStore.query])
 
     return (
         <CatalogContext.Provider value={catalogStore}>
@@ -84,9 +93,9 @@ const CatalogPage: React.FC = () => {
                             {`Showing ${catalogStore.limit * (page) + 1} – ${Math.min(catalogStore.totalResults, catalogStore.limit * (page + 1))} of ${catalogStore.totalResults}`}
                         </Text>
                         <Pagination size='lg' withPages={false} total={catalogStore.totalPages} value={page + 1} onChange={(val) => setPage(val - 1)} />
-                        
+
                     </Group>
-                    
+
                 </Group>
 
 
@@ -118,6 +127,6 @@ const CatalogPage: React.FC = () => {
             </Stack>
         </CatalogContext.Provider>
     );
-};
+});
 
 export default CatalogPage;

@@ -29,6 +29,7 @@ class AuthStore {
 
     setAuthToken(this.accessToken);
     this.checkAuthStatus();*/
+    
   }
 
   async init() {
@@ -39,6 +40,7 @@ class AuthStore {
       this.accessToken = access;
       this.refreshToken = refresh;
       setAuthToken(access);
+      await this.refreshAccessToken();
       await this.checkAuthStatus();
     }
   }
@@ -99,6 +101,26 @@ class AuthStore {
     } catch (err) {
       this.clearTokens();
       this.user = null;
+    }
+  }
+
+  
+  async refreshAccessToken(): Promise<string | null> {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      console.log(refreshToken)
+      if (!refreshToken) return null;
+
+      const response = await api.post("/auth/token/refresh/", { refresh: refreshToken });
+
+      const newAccessToken = response.data.access;
+      localStorage.setItem("accessToken", newAccessToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error("Ошибка обновления токена", error);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      return null;
     }
   }
 }
